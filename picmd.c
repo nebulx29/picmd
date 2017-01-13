@@ -13,6 +13,7 @@
 
 #define PRESS_DELAY 1000
 #define LOOP_DELAY  50
+#define DEBUG 0
 
 unsigned int gpio_pin = 0;
 int sig=1;
@@ -44,8 +45,8 @@ int init(void) {
 		return 1;
 	}
 	wiringPiISR(gpio_pin, INT_EDGE_FALLING, &exInt0_ISR);
-	printf("Press_Delay=%dms. Loop_Delay=%dms\n",PRESS_DELAY,LOOP_DELAY); 
-	printf("WiringPi initialization done...\n");
+	if (DEBUG) printf("Press_Delay=%dms. Loop_Delay=%dms\n",PRESS_DELAY,LOOP_DELAY); 
+	if (DEBUG) printf("WiringPi initialization done...\n");
 	flag=0;
 	return 0;
 }
@@ -68,21 +69,17 @@ int main(int argc, char* argv[]) {
 		printf("Warning: Invalid gpio signal type '%s'. Allowed are '1' or '0'. Defaulting to '1'.\n");
 		sig=1;
 	}
-	printf("Start Listener on GPIO PIN %d for Signal %d\n",gpio_pin, sig);
 	cmd = argv[3];
-	printf("Command='%s'\n",cmd);
+	printf("Start Listener on GPIO PIN %d for Signal %d. Command='%s'\n",gpio_pin, sig, cmd);
 
 	init();
 
 	while (1) {
 		if (flag) {
-			printf("High signal received on GPIO PIN '%d'.\n", gpio_pin);
-			printf("Executing '%s'... start\n", cmd);	
+			printf("High signal received on GPIO PIN '%d'. Executing '%s'... start. Afterwards sleeping %dms. \n", gpio_pin, cmd, PRESS_DELAY);
 			system(cmd);
-			printf("Sleeping %d ms ...\n", PRESS_DELAY);
 			fflush(stdout);
 			delay(PRESS_DELAY);
-			printf("Sleeping done\n");
 			flag=0;
 		}	
 		delay(LOOP_DELAY);
