@@ -1,6 +1,6 @@
 /***
- * Program: picmd
- * Usage: picmd [gpio] '[command]'
+ * Program: picmd2
+ * Usage: picmd2 [gpio] '[command]'
  * Description: run as daemon, listening on GPIO pin (wiringPi numbering)
  *              on high signal the command is executed, Ctrl+C to stop program
  */
@@ -29,7 +29,7 @@ int init(void);
 void exInt0_ISR(void);
 
 void printUsage() {
-	fprintf(stderr, "Usage: picmd GPIO 1|0 'CMD'\n"
+	fprintf(stderr, "Usage: picmd2 GPIO 1|0 'CMD'\n"
                 "   Program listens on GPIO PIN [GPIO] for signal=[1|0] and executes [CMD] on high signal received.\n"
                 "   Default GPIO is 0 (BCM 17).\n\n"
 	        "   Examples: picmd 0 1 'sudo reboot'\n"
